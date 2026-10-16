@@ -23,7 +23,7 @@ const LOGO = '';
 const TABS = { ls: 'Liệt sĩ', me: 'Bà mẹ Việt Nam anh hùng', ah: 'Anh hùng lực lượng vũ trang' };
 const SHORT = { ls: 'Liệt sĩ', me: 'Bà mẹ Việt Nam anh hùng', ah: 'Anh hùng LLVT' };
 const FIELDS = { ls: [['q', 'Quê quán'], ['c', 'Chức vụ'], ['e', 'Nhập ngũ'], ['h', 'Hy sinh']], me: [['q', 'Quê quán']], ah: [['q', 'Quê quán'], ['c', 'Chức vụ'], ['h', 'Hy sinh']] };
-const HOME = 'Nhơn Hòa Lập', DEFAULT_PAGE_SIZE = 24, STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z"/></svg>';
+const HOME = 'Nhơn Hòa Lập', DEFAULT_PAGE_SIZE = 5, STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z"/></svg>';
 let tab = 'ls', pageSize = DEFAULT_PAGE_SIZE, currentPage = 1, cur = [];
 const $ = s => document.querySelector(s);
 const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;

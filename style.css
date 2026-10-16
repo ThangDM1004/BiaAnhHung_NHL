@@ -1304,3 +1304,95 @@
                 height: 260px
             }
         }
+        
+/* Khung mô hình 3D */
+.memorial-3d,
+.memorial-3d .wrap,
+.memorial-3d-grid,
+.memorial-panel {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.memorial-3d-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    align-items: start;
+}
+
+.memorial-viewer {
+    width: 100%;
+    height: 520px;
+    min-height: 320px;
+    position: relative;
+    overflow: hidden;
+    background: #f3f6f9;
+    border-radius: 12px;
+}
+
+.memorial-viewer model-viewer {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Hiển thị tốt trên điện thoại */
+@media (max-width: 768px) {
+    .memorial-3d {
+        position: relative;
+        overflow: visible;
+        padding: 24px 0;
+    }
+
+    .memorial-3d .wrap {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .memorial-3d-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .memorial-panel {
+        width: 100%;
+        min-width: 0;
+        overflow: visible;
+    }
+
+    .memorial-viewer {
+        height: 380px;
+        min-height: 380px;
+    }
+
+    .memorial-viewer model-viewer {
+        width: 100%;
+        height: 100%;
+        min-height: 380px;
+    }
+
+    .memorial-panel h3 {
+        overflow-wrap: anywhere;
+    }
+
+    .memorial-video video {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 400px) {
+    .memorial-viewer {
+        height: 320px;
+        min-height: 320px;
+    }
+
+    .memorial-viewer model-viewer {
+        min-height: 320px;
+    }
+}
