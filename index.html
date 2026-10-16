@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Bia tưởng niệm xã Nhơn Hòa Lập</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Lora:wght@500;600;700&display=swap">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <header class="top">
+        <div class="wrap"><a class="brand" href="#"><img class="logo" src="images/logo.png"
+                    alt="Logo xã Nhơn Hòa Lập"><span class="bn"><b>Xã Nhơn Hòa Lập</b><small>Chi đoàn cơ sở UBND
+                        xã</small></span></a>
+            <div class="links"><a href="#thongke">Thống kê</a><a href="#danhsach">Danh sách</a></div>
+        </div>
+    </header>
+    <div class="gallery-window">
+        <div class="gallery-track">
+            <div class="gallery-slide"><img src="images/khu_di_tich.jpg" alt="Hình ảnh thứ nhất về xã Nhơn Hòa Lập">
+                <div class="gallery-caption">Khu di tích căn cứ xứ uỷ và Uỷ ban hành chính kháng chiến Nam Bộ
+                    (1946-1949)</div>
+            </div>
+            <div class="gallery-slide"><img src="images/tru_so.jpg" alt="Hình ảnh thứ hai về xã Nhơn Hòa Lập">
+                <div class="gallery-caption">Trụ sở Đảng uỷ - HĐND - UBND - UB.MTTQ Việt Nam xã Nhơn Hòa Lập</div>
+            </div>
+            <div class="gallery-slide"><img src="images/bia_tuong_niem.jpg" alt="Hình ảnh thứ ba về xã Nhơn Hòa Lập">
+                <div class="gallery-caption">Tri ân truyền thống – Bia tưởng niệm</div>
+            </div>
+        </div><button class="gallery-btn gallery-prev" type="button" onclick="changeGallery(-1)"
+            aria-label="Hình trước">&#10094;</button><button class="gallery-btn gallery-next" type="button"
+            onclick="changeGallery(1)" aria-label="Hình tiếp theo">&#10095;</button>
+        <div class="gallery-dots"><button type="button" onclick="goToGallery(0)" aria-label="Xem hình 1"
+                class="gallery-dot active"></button><button type="button" onclick="goToGallery(1)"
+                aria-label="Xem hình 2" class="gallery-dot"></button><button type="button" onclick="goToGallery(2)"
+                aria-label="Xem hình 3" class="gallery-dot"></button></div>
+    </div>
+    <section class="hero"><svg class="big" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z" />
+        </svg><svg class="sm" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z" />
+        </svg>
+        <div class="wrap">
+            <p class="kick"><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z" />
+                </svg></p>
+            <h1>Bia tưởng niệm xã Nhơn Hòa Lập</h1>
+            <p class="lead">Ghi danh liệt sĩ, Bà mẹ Việt Nam anh hùng và Anh hùng lực lượng vũ trang của xã. Tìm tên
+                người thân, đồng đội để thắp nén tâm nhang tưởng nhớ.</p>
+        </div>
+    </section>
+    <!-- KHU VỰC MÔ HÌNH 3D VÀ VIDEO CÔNG TRÌNH -->
+    <section class="memorial-3d">
+        <div class="wrap">
+            <div class="memorial-3d-heading">
+                <h2>KHÔNG GIAN 3D BIA TƯỞNG NIỆM</h2>
+                <p>Quan sát mô hình và video giới thiệu công trình bia tưởng niệm xã Nhơn Hòa Lập</p>
+            </div>
+            <div class="memorial-3d-grid">
+                <div class="memorial-panel">
+                    <h3>MÔ HÌNH 3D</h3>
+                    <div class="memorial-viewer"><model-viewer id="bia3d" src="models/vietnamese_memorial_pavilion.glb"
+                            alt="Mô hình 3D bia tưởng niệm" camera-orbit="0deg 90deg auto"
+                            camera-target="auto auto auto" interaction-prompt="none" shadow-intensity="1" exposure="1"
+                            camera-controls disable-zoom min-camera-orbit="auto 90deg auto"
+                            max-camera-orbit="auto 90deg auto" style="width:100%;height:520px;"></model-viewer></div>
+                    <p class="panel-note">Mô hình tương tác: kéo chuột để quan sát công trình.</p>
+                </div>
+                <div class="memorial-panel">
+                    <h3>VIDEO GIỚI THIỆU CÔNG TRÌNH</h3>
+                    <div class="memorial-video"><video controls playsinline preload="metadata"
+                            poster="images/bia_tuong_niem.jpg">
+                            <source src="videos/cong-trinh-3d.mp4" type="video/mp4">Trình duyệt không hỗ trợ phát video.
+                        </video></div>
+                    <p class="panel-note">Video phối cảnh 3D công trình bia tưởng niệm.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+    <div class="wrap data-section">
+        <div class="tiles" id="tiles"></div>
+        <div class="orn" id="thongke"><svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z" />
+            </svg>
+            <h2>Liệt sĩ hy sinh theo giai đoạn</h2><svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z" />
+            </svg>
+        </div>
+        <div class="stat" id="stat"></div>
+        <div class="orn" id="danhsach"><svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z" />
+            </svg>
+            <h2>Tra cứu danh sách</h2><svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z" />
+            </svg>
+        </div><label for="q" hidden>Tìm theo tên</label><input id="q" class="search" type="search"
+            placeholder="Nhập họ tên hoặc quê quán để tìm" autocomplete="off">
+        <nav role="tablist" aria-label="Danh sách"></nav>
+        <div class="bar"><span id="count" role="status" aria-live="polite"></span>
+            <div class="ctl"><label>Quê quán: <select id="home">
+                        <option value="all">Tất cả</option>
+                        <option value="in">Xã Nhơn Hòa Lập</option>
+                        <option value="out">Nơi khác</option>
+                    </select></label><label>Sắp xếp: <select id="sort">
+                        <option value="n">Họ tên A–Z</option>
+                        <option value="b">Năm sinh</option>
+                        <option value="h">Ngày hy sinh</option>
+                    </select></label></div>
+        </div>
+        <main>
+            <ul class="grid" id="grid"></ul>
+            <div class="pagination" id="pagination" aria-label="Phân trang danh sách"></div>
+        </main>
+    </div>
+    <section class="quote">
+        <p>Uống nước nhớ nguồn</p><small>Tri ân các anh hùng, liệt sĩ đã hy sinh vì độc lập, tự do của Tổ quốc</small>
+    </section>
+    <footer>
+        <div class="wrap copyright"><a class="brand" href="#" aria-label="Xã Nhơn Hòa Lập"><img class="logo"
+                    src="images/logo.png" alt="Logo xã Nhơn Hòa Lập"></a><span>© 2026 Bản quyền thuộc về Chi đoàn cơ sở
+                UBND xã Nhơn Hòa Lập.<br><small>Trang thông tin được xây dựng với mục đích tuyên truyền và tri ân truyền
+                    thống quê hương.</small></span></div>
+    </footer>
+    <dialog id="dlg"><button class="x" aria-label="Đóng">×</button>
+        <div id="dbody"></div>
+    </dialog>
+    <script src="index.js"></script>
+</body>
+
+</html>
