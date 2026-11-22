@@ -41,10 +41,73 @@ function tiles() {
 function chart() {
     const P = [['Trước 1955', 0, 1954], ['1955 – 1964', 1955, 1964], ['1965 – 1975', 1965, 1975], ['Sau 1975', 1976, 9999]];
     const c = P.map(([l, a, b]) => [l, DATA.ls.filter(r => { const y = yearOf(r.h); return y && y >= a && y <= b }).length]), m = Math.max(...c.map(x => x[1])), k = c.reduce((s, x) => s + x[1], 0);
-    $('#stat').innerHTML = `<p>Tính theo năm hy sinh của ${k}/${DATA.ls.length} liệt sĩ có ghi năm.</p>` + c.map(([l, n]) => `<div class="row"><span>${l}</span><span class="track"><i class="fill" data-w="${m ? n / m * 100 : 0}"></i></span><b>${n}</b></div>`).join('');
-    const go = () => document.querySelectorAll('.fill').forEach(e => e.style.width = e.dataset.w + '%'); reduce ? (document.querySelectorAll('.fill').forEach(e => e.style.transition = 'none'), go()) : setTimeout(go, 300)
+    $('#stat').innerHTML = `<p class="stat-note">Tính theo năm hy sinh của ${k}/${DATA.ls.length} liệt sĩ có ghi năm.</p><div class="pgrid">` + c.map(([l, n], j) => {
+        const pct = k ? Math.round(n / k * 100) : 0;
+        return `<div class="pcard" style="--v:${pct};--d:${j}"><div class="ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="ring-bg" cx="60" cy="60" r="52"/><circle class="ring-fg" cx="60" cy="60" r="52" pathLength="100"/></svg><b class="pnum" data-t="${n}">${reduce ? n : 0}</b></div><span class="plab">${l}</span><small>${pct}% số liệt sĩ</small></div>`;
+    }).join('') + '</div>';
 }
 function renderTabs() { $('nav').innerHTML = Object.keys(TABS).map(k => `<button class="tab" role="tab" data-k="${k}" aria-selected="${k === tab}">${TABS[k]}<b>${DATA[k].length}</b></button>`).join('') }
+/* ---------- Thẻ anh hùng: biểu tượng, thông tin phụ, thắp nhang ---------- */
+const ICON = {
+    pin: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>',
+    shield: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>',
+    home: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>',
+    lotus: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c2.3 2.6 3.4 5.2 3.4 7.8S14 15.6 12 17c-2-1.4-3.4-3.6-3.4-6.2S9.7 5.6 12 3z"/><path d="M3 8.5c3.4.2 6 2 7.4 5.3.5 1.3.6 2.5.4 3.3C7 16.6 3.6 13.4 3 8.5z"/><path d="M21 8.5c-.6 4.9-4 8.1-7.8 8.6-.2-.8-.1-2 .4-3.3C15 10.5 17.6 8.7 21 8.5z"/><path d="M4 19.5c2.6 1 5.3 1.5 8 1.5s5.4-.5 8-1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'
+};
+const KIND = { ls: 'Liệt sĩ', me: 'Mẹ Việt Nam anh hùng', ah: 'Anh hùng LLVT' };
+const LIT_KEY = 'nhl-thap-nhang';
+let lit = new Set();
+try { lit = new Set(JSON.parse(localStorage.getItem(LIT_KEY) || '[]')) } catch (err) { }
+const litId = r => tab + ':' + r.n + ':' + (r.b || '');
+function ageOf(r) { const b = +r.b, d = yearOf(r.h); return b && d && d > b ? d - b : 0 }
+function ageBlock(r) { const a = ageOf(r); return a ? `<div class="age"><b>${a}</b><span>tuổi<br>khi hy sinh</span></div>` : '' }
+function timeline(r) {
+    const pts = [[r.b, 'Sinh'], [r.e, 'Nhập ngũ'], [r.h, 'Hy sinh']].filter(p => p[0]);
+    if (pts.length < 2) return '';
+    return `<ol class="tl">` + pts.map(([v, lb], j) => `<li style="--j:${j}"><i></i><b>${esc(v)}</b><small>${lb}</small></li>`).join('') + '</ol>';
+}
+function emblem() { return tab === 'me' ? ICON.lotus : STAR }
+function incenseBtn(on) {
+    return `<button class="incense${on ? ' lit' : ''}" type="button" aria-pressed="${on}"><span class="joss" aria-hidden="true"><span class="stick"></span><span class="flame"></span><span class="smoke"></span><span class="smoke s2"></span></span><span class="incense-l">${on ? 'Đã thắp nhang' : 'Thắp nén nhang'}</span></button>`;
+}
+function cardHTML(r, i, offset, q) {
+    const l = life(r), on = lit.has(litId(r));
+    const variant = tab === 'ls' ? 'v' + (i % 3) : 'v-' + tab;
+    const home = norm(r.q).startsWith(norm(HOME));
+    const chips = [
+        r.q ? `<span class="chip chip-q">${ICON.pin}<span>${mark(r.q, q)}</span></span>` : '<span class="chip na">' + ICON.pin + '<span>Chưa rõ quê quán</span></span>',
+        tab !== 'me' ? (r.c ? `<span class="chip chip-c">${ICON.shield}<span>${esc(r.c)}</span></span>` : '<span class="chip na">' + ICON.shield + '<span>Chưa rõ chức vụ</span></span>') : ''
+    ].join('');
+    return `<li class="card ${variant}${on ? ' is-lit' : ''}" data-i="${i}" style="--d:${offset}">`
+        + `<span class="card-frame" aria-hidden="true"></span>`
+        + (home ? `<span class="home-badge">${ICON.home}Người con quê hương</span>` : '')
+        + `<div class="card-top"><span class="card-no">№ ${String(i + 1).padStart(3, '0')}</span><span class="card-emb">${emblem()}</span><span class="card-kind">${KIND[tab]}</span></div>`
+        + `<h3>${mark(r.n, q)}</h3><p class="yrs">${l ? esc(l) : '&nbsp;'}</p>`
+        + ageBlock(r) + timeline(r)
+        + `<div class="chips">${chips}</div>`
+        + `<div class="card-actions">${incenseBtn(on)}<button class="more" type="button">Chi tiết <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m0 0-6-6m6 6-6 6"/></svg></button></div>`
+        + `<span class="card-sheen" aria-hidden="true"></span></li>`;
+}
+function toggleIncense(btn) {
+    const c = btn.closest('.card'), r = cur[+c.dataset.i]; if (!r) return;
+    const id = litId(r), on = !lit.has(id);
+    on ? lit.add(id) : lit.delete(id);
+    try { localStorage.setItem(LIT_KEY, JSON.stringify([...lit])) } catch (err) { }
+    btn.classList.toggle('lit', on);
+    btn.setAttribute('aria-pressed', on);
+    btn.querySelector('.incense-l').textContent = on ? 'Đã thắp nhang' : 'Thắp nén nhang';
+    c.classList.toggle('is-lit', on);
+    if (on && !reduce) {
+        for (let k = 0; k < 10; k++) {
+            const s = document.createElement('i');
+            s.className = 'spark';
+            s.style.cssText = `--sx:${(Math.random() * 80 - 40).toFixed(0)}px;--sy:${(-40 - Math.random() * 50).toFixed(0)}px;--sd:${(Math.random() * .2).toFixed(2)}s`;
+            btn.appendChild(s);
+            setTimeout(() => s.remove(), 1100);
+        }
+    }
+}
+
 function render() {
     const q = norm($('#q').value.trim()), home = $('#home').value, sk = $('#sort').value;
     cur = DATA[tab].filter(r => {
@@ -61,14 +124,7 @@ function render() {
     const end = Math.min(start + pageSize, cur.length);
     const pageItems = cur.slice(start, end);
 
-    $('#grid').innerHTML = pageItems.length ? pageItems.map((r, offset) => {
-        const i = start + offset;
-        const l = life(r);
-        return `<li class="card" data-i="${i}"><h3>${mark(r.n, q)}</h3><p class="yrs">${l ? STAR + esc(l) : ''}</p><dl>` + FIELDS[tab].filter(f => f[0] !== 'e' && f[0] !== 'h' || tab === 'ah').map(([k, lb]) => {
-            const v = r[k];
-            return `<div><dt>${lb}</dt>${v ? `<dd>${k === 'q' ? mark(v, q) : esc(v)}</dd>` : '<dd class="na">Chưa có thông tin</dd>'}</div>`;
-        }).join('') + '</dl><button class="more" type="button">Xem chi tiết</button></li>';
-    }).join('') : '<li class="empty">Không tìm thấy kết quả. Hãy thử gõ ít chữ hơn hoặc kiểm tra lại họ tên.</li>';
+    $('#grid').innerHTML = pageItems.length ? pageItems.map((r, offset) => cardHTML(r, start + offset, offset, q)).join('') : '<li class="empty">Không tìm thấy kết quả. Hãy thử gõ ít chữ hơn hoặc kiểm tra lại họ tên.</li>';
 
     $('#count').textContent = `${cur.length} / ${DATA[tab].length} người`;
     const pagination = $('#pagination');
@@ -110,7 +166,7 @@ function openD(i) {
 
     const r = cur[i]; if (!r) return; const l = life(r);
 
-    $('#dbody').innerHTML = `<h2>${esc(r.n)}</h2><p class="yrs">${l ? STAR + esc(l) : ''}</p><dl>` + [['b', 'Năm sinh']].concat(FIELDS[tab]).map(([k, lb]) => `<div><dt>${lb}</dt>${r[k] ? `<dd>${esc(r[k])}</dd>` : '<dd class="na">Chưa có thông tin</dd>'}</div>`).join('') + '</dl>';
+    $('#dbody').innerHTML = `<span class="card-kind">${KIND[tab]}</span><h2>${esc(r.n)}</h2><p class="yrs">${l ? STAR + esc(l) : ''}</p>${ageBlock(r)}${timeline(r)}<dl>` + [['b', 'Năm sinh']].concat(FIELDS[tab]).map(([k, lb]) => `<div><dt>${lb}</dt>${r[k] ? `<dd>${esc(r[k])}</dd>` : '<dd class="na">Chưa có thông tin</dd>'}</div>`).join('') + '</dl>';
 
     $('#dlg').showModal()
 
@@ -138,8 +194,108 @@ $('#tiles').onclick = e => { const b = e.target.closest('.tile'); if (!b) return
 
 function syncTiles() { document.querySelectorAll('.tile').forEach(t => t.setAttribute('aria-pressed', t.dataset.k === tab)) }
 
-$('#grid').onclick = e => { const c = e.target.closest('.card'); if (c) openD(+c.dataset.i) };
+$('#grid').onclick = e => { const inc = e.target.closest('.incense'); if (inc) { toggleIncense(inc); return } const c = e.target.closest('.card'); if (c) openD(+c.dataset.i) };
 
 $('#dlg').onclick = e => { if (e.target === $('#dlg') || e.target.closest('.x')) $('#dlg').close() };
 
 logos(); tiles(); chart(); renderTabs(); render();
+
+/* =========================================================
+   Hiệu ứng giao diện
+   ========================================================= */
+(() => {
+    const top = document.querySelector('.top');
+    const hero = document.querySelector('.hero');
+    const heroBg = document.querySelector('.hero-bg');
+    const heroContent = document.querySelector('.hero-content');
+    const nums = [...document.querySelectorAll('.feature-num')];
+
+    // Thanh tiến trình cuộn trang
+    const progress = document.createElement('span');
+    progress.className = 'progress';
+    progress.setAttribute('aria-hidden', 'true');
+    top.appendChild(progress);
+
+    // Tách tiêu đề hero thành từng chữ để hiện lần lượt
+    const h1 = document.querySelector('.hero h1');
+    if (h1 && !reduce) {
+        const words = h1.textContent.trim().split(/\s+/);
+        h1.setAttribute('aria-label', h1.textContent.trim());
+        h1.innerHTML = words.map((w, i) => `<span class="w" aria-hidden="true" style="--i:${i}">${esc(w)}</span>`).join(' ');
+    }
+
+    // Đốm sáng như tàn nhang bay lên trong hero
+    if (hero && !reduce) {
+        const box = document.createElement('div');
+        box.className = 'embers';
+        box.setAttribute('aria-hidden', 'true');
+        for (let i = 0; i < 22; i++) {
+            const e = document.createElement('i');
+            e.style.cssText = `--x:${Math.random() * 100}%;--s:${2 + Math.random() * 4}px;--t:${7 + Math.random() * 9}s;--dl:${-Math.random() * 14}s;--sw:${(Math.random() * 60 - 30).toFixed(0)}px`;
+            box.appendChild(e);
+        }
+        hero.appendChild(box);
+    }
+
+    // Cuộn: header, tiến trình, parallax
+    let ticking = false;
+    const onScroll = () => {
+        const y = window.scrollY, max = document.documentElement.scrollHeight - innerHeight;
+        top.classList.toggle('scrolled', y > 40);
+        progress.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+        if (!reduce) {
+            const hh = hero.offsetHeight;
+            if (y < hh) {
+                heroBg.style.transform = `translate3d(0, ${y * .35}px, 0)`;
+                heroContent.style.transform = `translate3d(0, ${y * .18}px, 0)`;
+                heroContent.style.opacity = Math.max(0, 1 - y / (hh * .75));
+            }
+            nums.forEach(n => {
+                const r = n.parentElement.getBoundingClientRect();
+                if (r.bottom > -200 && r.top < innerHeight + 200) n.style.transform = `translate3d(0, ${(r.top - innerHeight / 2) * -.12}px, 0)`;
+            });
+        }
+        ticking = false;
+    };
+    window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll) } }, { passive: true });
+    onScroll();
+
+    // Đếm số tăng dần
+    const countUp = el => {
+        const t = +el.dataset.t;
+        if (reduce) { el.textContent = t; return }
+        const s = performance.now();
+        (function f(n) { const p = Math.min(1, (n - s) / 1400); el.textContent = Math.round(t * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(f) })(s);
+    };
+
+    const stat = $('#stat');
+    if (reduce || !('IntersectionObserver' in window)) { stat.classList.add('go'); return }
+
+    // Hiện dần khi cuộn tới
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        if (e.target === stat) { stat.classList.add('go'); stat.querySelectorAll('.pnum').forEach(countUp) }
+        io.unobserve(e.target);
+    }), { rootMargin: '0px 0px -12% 0px' });
+    document.querySelectorAll('.feature-text, .feature-img, .sec-head, .memorial-panel, .stat, .search, .quote .wrap, .foot > *')
+        .forEach((el, i) => { el.classList.add('reveal'); io.observe(el) });
+    document.querySelectorAll('.memorial-panel').forEach((el, i) => el.style.transitionDelay = i * .15 + 's');
+
+    // Thẻ nghiêng 3D theo con trỏ
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        const grid = $('#grid');
+        grid.addEventListener('pointermove', e => {
+            const c = e.target.closest('.card'); if (!c) return;
+            const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+            c.style.setProperty('--ry', (x - .5) * 10 + 'deg');
+            c.style.setProperty('--rx', (.5 - y) * 10 + 'deg');
+            c.style.setProperty('--mx', x * 100 + '%');
+            c.style.setProperty('--my', y * 100 + '%');
+        });
+        grid.addEventListener('pointerout', e => {
+            const c = e.target.closest('.card');
+            if (c && !c.contains(e.relatedTarget)) { c.style.removeProperty('--rx'); c.style.removeProperty('--ry') }
+        });
+    }
+})();
