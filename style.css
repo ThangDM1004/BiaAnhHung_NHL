@@ -2637,8 +2637,7 @@ mark {
 
 /* =========================================================
    Thẻ anh hùng đa dạng
-   v0 bia vòm · v1 huân chương · v2 bằng Tổ quốc ghi công
-   v-me thẻ Mẹ Việt Nam anh hùng · v-ah thẻ Anh hùng LLVT
+   Một kiểu chung cho mọi thẻ: v2 "Bằng Tổ quốc ghi công"
    ========================================================= */
 
 @property --ang {
@@ -3164,71 +3163,14 @@ mark {
     box-shadow: 0 0 0 1px #fdba74, 0 18px 40px -16px rgba(255, 140, 0, .55)
 }
 
-/* ---------- v0: Bia vòm (cam) ---------- */
-.card.v0 {
-    border-radius: 140px 140px 16px 16px;
-    padding-top: 34px
-}
-
-.card.v0 .home-badge {
+/* ---------- v2: Bằng Tổ quốc ghi công (vàng giấy) ---------- */
+.card.v2 .home-badge {
     position: relative !important;
     top: auto;
     left: auto;
-    margin: 0 auto 10px
+    margin: 0 auto 8px
 }
 
-.card.v0 .card-frame {
-    border: 1px solid color-mix(in srgb, var(--c1) 22%, transparent);
-    border-radius: 132px 132px 10px 10px
-}
-
-/* ---------- v1: Huân chương (đỏ) ---------- */
-.card.v1 {
-    --c1: #d0011b;
-    --c2: #ff6b6b;
-    --tint: transparent;
-    border-radius: 8px;
-    padding-top: 0;
-    background: linear-gradient(180deg, #d0011b 0, #ff4d4f 84px, #fff 84px)
-}
-
-.card.v1:nth-child(3n+2),
-.card.v1:nth-child(3n) {
-    background: linear-gradient(180deg, #d0011b 0, #ff4d4f 84px, #fff 84px)
-}
-
-.card.v1 .card-frame {
-    inset: 0;
-    border-radius: 8px;
-    background:
-        repeating-linear-gradient(135deg, rgba(255, 255, 255, .08) 0 6px, transparent 6px 14px) 0 0 / 100% 84px no-repeat
-}
-
-.card.v1 .card-top {
-    padding-top: 14px
-}
-
-.card.v1 .card-no {
-    color: rgba(255, 255, 255, .85)
-}
-
-.card.v1 .card-emb {
-    width: 64px;
-    height: 64px;
-    background: radial-gradient(circle at 35% 30%, #fff3b0, #f5c518 45%, #b8860b);
-    box-shadow: 0 0 0 4px #fff, 0 10px 22px -6px rgba(208, 1, 27, .6)
-}
-
-.card.v1 .card-emb svg {
-    fill: #d0011b
-}
-
-.card.v1 .card-emb::before,
-.card.v1 .card-emb::after {
-    border-color: #f5c518
-}
-
-/* ---------- v2: Bằng Tổ quốc ghi công (vàng giấy) ---------- */
 .card.v2 {
     --c1: #b7791f;
     --c2: #f6c453;
@@ -3285,128 +3227,9 @@ mark {
     border-top-color: rgba(183, 121, 31, .3)
 }
 
-/* ---------- Mẹ Việt Nam anh hùng (hồng sen) ---------- */
-.card.v-me {
-    --c1: #e11d48;
-    --c2: #fb7185;
-    --tint: rgba(251, 113, 133, .16);
-    border-radius: 28px;
-    background:
-        radial-gradient(60% 40% at 100% 0%, rgba(251, 113, 133, .18), transparent 70%),
-        radial-gradient(50% 40% at 0% 100%, rgba(244, 114, 182, .12), transparent 70%),
-        #fff
-}
-
-.card.v-me:nth-child(3n+2),
-.card.v-me:nth-child(3n) {
-    background:
-        radial-gradient(60% 40% at 100% 0%, rgba(251, 113, 133, .18), transparent 70%),
-        radial-gradient(50% 40% at 0% 100%, rgba(244, 114, 182, .12), transparent 70%),
-        #fff
-}
-
-.card.v-me .card-emb {
-    width: 62px;
-    height: 62px;
-    background: linear-gradient(145deg, #fda4af, #e11d48)
-}
-
-.card.v-me .card-emb svg {
-    width: 30px;
-    height: 30px;
-    fill: #fff;
-    color: #fff
-}
-
-.card.v-me:hover .card-emb svg {
-    transform: scale(1.15)
-}
-
-.card.v-me .card-frame::before,
-.card.v-me .card-frame::after {
-    content: "";
-    position: absolute;
-    width: 14px;
-    height: 10px;
-    border-radius: 100% 0;
-    background: #fda4af;
-    opacity: .7;
-    animation: petal 7s linear infinite
-}
-
-.card.v-me .card-frame::before {
-    left: 20%;
-    top: -10px
-}
-
-.card.v-me .card-frame::after {
-    left: 70%;
-    top: -10px;
-    animation-delay: 3.5s
-}
-
-@keyframes petal {
-    0% {
-        transform: translate(0, 0) rotate(0);
-        opacity: 0
-    }
-
-    10% {
-        opacity: .7
-    }
-
-    100% {
-        transform: translate(-40px, 360px) rotate(540deg);
-        opacity: 0
-    }
-}
-
-/* ---------- Anh hùng LLVT (vàng kim) ---------- */
-.card.v-ah {
-    --c1: #b8860b;
-    --c2: #ffd84d;
-    --tint: rgba(255, 216, 77, .25);
-    border-radius: 18px;
-    border-color: #f0d27a;
-    background:
-        linear-gradient(160deg, #fffbea, #fff 45%, #fff6d6)
-}
-
-.card.v-ah .card-emb {
-    width: 72px;
-    height: 72px;
-    background: conic-gradient(from 0deg, #b8860b, #ffe57a, #b8860b, #ffe57a, #b8860b);
-    animation: medalSpin 8s linear infinite;
-    box-shadow: 0 0 0 4px #fff, 0 0 0 6px #f0d27a, 0 12px 26px -8px rgba(184, 134, 11, .8)
-}
-
-.card.v-ah .card-emb svg {
-    width: 30px;
-    height: 30px;
-    fill: #c8102e;
-    animation: medalSpin 8s linear infinite reverse
-}
-
-@keyframes medalSpin {
-    to {
-        transform: rotate(360deg)
-    }
-}
-
 /* Lối vào khác nhau cho từng kiểu */
-.card.v1 {
-    animation-name: cardFlip
-}
-
 .card.v2 {
     animation-name: cardZoom
-}
-
-@keyframes cardFlip {
-    from {
-        opacity: 0;
-        transform: rotateY(-70deg) translateX(-20px)
-    }
 }
 
 @keyframes cardZoom {
@@ -3442,10 +3265,6 @@ dialog {
 @media (max-width: 640px) {
     .card {
         padding: 26px 18px 18px
-    }
-
-    .card.v1 {
-        padding-top: 0
     }
 
     .card-actions {

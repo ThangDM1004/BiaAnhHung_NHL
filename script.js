@@ -51,8 +51,7 @@ function renderTabs() { $('nav').innerHTML = Object.keys(TABS).map(k => `<button
 const ICON = {
     pin: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>',
     shield: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>',
-    home: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>',
-    lotus: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c2.3 2.6 3.4 5.2 3.4 7.8S14 15.6 12 17c-2-1.4-3.4-3.6-3.4-6.2S9.7 5.6 12 3z"/><path d="M3 8.5c3.4.2 6 2 7.4 5.3.5 1.3.6 2.5.4 3.3C7 16.6 3.6 13.4 3 8.5z"/><path d="M21 8.5c-.6 4.9-4 8.1-7.8 8.6-.2-.8-.1-2 .4-3.3C15 10.5 17.6 8.7 21 8.5z"/><path d="M4 19.5c2.6 1 5.3 1.5 8 1.5s5.4-.5 8-1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'
+    home: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>'
 };
 const KIND = { ls: 'Liệt sĩ', me: 'Mẹ Việt Nam anh hùng', ah: 'Anh hùng LLVT' };
 const LIT_KEY = 'nhl-thap-nhang';
@@ -66,22 +65,20 @@ function timeline(r) {
     if (pts.length < 2) return '';
     return `<ol class="tl">` + pts.map(([v, lb], j) => `<li style="--j:${j}"><i></i><b>${esc(v)}</b><small>${lb}</small></li>`).join('') + '</ol>';
 }
-function emblem() { return tab === 'me' ? ICON.lotus : STAR }
 function incenseBtn(on) {
     return `<button class="incense${on ? ' lit' : ''}" type="button" aria-pressed="${on}"><span class="joss" aria-hidden="true"><span class="stick"></span><span class="flame"></span><span class="smoke"></span><span class="smoke s2"></span></span><span class="incense-l">${on ? 'Đã thắp nhang' : 'Thắp nén nhang'}</span></button>`;
 }
 function cardHTML(r, i, offset, q) {
     const l = life(r), on = lit.has(litId(r));
-    const variant = tab === 'ls' ? 'v' + (i % 3) : 'v-' + tab;
     const home = norm(r.q).startsWith(norm(HOME));
     const chips = [
         r.q ? `<span class="chip chip-q">${ICON.pin}<span>${mark(r.q, q)}</span></span>` : '<span class="chip na">' + ICON.pin + '<span>Chưa rõ quê quán</span></span>',
         tab !== 'me' ? (r.c ? `<span class="chip chip-c">${ICON.shield}<span>${esc(r.c)}</span></span>` : '<span class="chip na">' + ICON.shield + '<span>Chưa rõ chức vụ</span></span>') : ''
     ].join('');
-    return `<li class="card ${variant}${on ? ' is-lit' : ''}" data-i="${i}" style="--d:${offset}">`
+    return `<li class="card v2${on ? ' is-lit' : ''}" data-i="${i}" style="--d:${offset}">`
         + `<span class="card-frame" aria-hidden="true"></span>`
         + (home ? `<span class="home-badge">${ICON.home}Người con quê hương</span>` : '')
-        + `<div class="card-top"><span class="card-no">№ ${String(i + 1).padStart(3, '0')}</span><span class="card-emb">${emblem()}</span><span class="card-kind">${KIND[tab]}</span></div>`
+        + `<div class="card-top"><span class="card-no">№ ${String(i + 1).padStart(3, '0')}</span><span class="card-emb">${STAR}</span><span class="card-kind">${KIND[tab]}</span></div>`
         + `<h3>${mark(r.n, q)}</h3><p class="yrs">${l ? esc(l) : '&nbsp;'}</p>`
         + ageBlock(r) + timeline(r)
         + `<div class="chips">${chips}</div>`
